@@ -163,6 +163,13 @@ class FormRealizer {
         if (isset($classes))
             $attributes[] = $classes;
 
+        $customAttributes = static::processCustomAttributes($formElement);
+        if (isset($customAttributes)) {
+            foreach ($customAttributes as $attr) {
+                $attributes[] = $customAttributes;
+            }
+        }
+
         $result = '<'.implode(' ', $attributes).'>';
 
         if ($formElement->_get('closable')) {
@@ -171,6 +178,21 @@ class FormRealizer {
         }
 
         return $result;
+    }
+
+    protected static function processCustomAttributes($formElement) {
+        if (!$formElement instanceof FormElement) return null;
+
+        $classesAttributes = array();
+
+        foreach ($formElement->_get('attributes') as $key => $value) {
+            $classesAttributes[] = $key.'='.static::quote().$value.static::quote();
+        }
+
+        if (count($classesAttributes)==0)
+            return null;
+
+        return $classesAttributes;
     }
 
     protected static function processClasses($formElement) {

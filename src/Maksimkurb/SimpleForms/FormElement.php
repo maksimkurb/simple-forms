@@ -49,6 +49,8 @@ class FormElement {
     protected $tabIndex = null;         // Tab index
     protected $value = null;            // Value
 
+    protected $attributes = array();
+
 
     public function tag($tag) {
         $this->tag = $tag;
@@ -66,8 +68,8 @@ class FormElement {
         return $this;
     }
 
-    public function addClasses($classes) {
-        foreach ($classes as $className) {
+    public function addClasses() {
+        foreach (func_get_args() as $className) {
             $this->addClass($className);
         }
         return $this;
@@ -292,6 +294,21 @@ class FormElement {
 
     public function value($value) {
         $this->value = $value;
+        return $this;
+    }
+
+    public function setAttribute($key, $value) {
+        $this->attributes[$key] = $value;
+        return $this;
+    }
+
+    public function removeAttribute($key) {
+        foreach ($this->attributes as $id => $value) {
+            if ($id == $key) {
+                unset($this->attributes[$key]);
+                break;
+            }
+        }
         return $this;
     }
 

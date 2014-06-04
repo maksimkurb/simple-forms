@@ -11,7 +11,7 @@ return array(
          *
          * This prefix will be added to any form elements ID
          *
-         * For example if id prefix is 'formEl_' and you run Form::text('username')->make() it will generate something like <input id="formEl_username" name="username" ...>
+         * For example if id prefix is 'formEl_' and you will run Form::text('username')->make() SimpleForms will generate something like <input id="formEl_username" name="username" ...>
          *
          * ID Prefix is very recommended to keep site style in safety
          *
@@ -37,8 +37,10 @@ return array(
 
     )
 
-
-
-
-
+    /*
+     * Please, sorry me for my bad English,
+     * if you have questions, you can ask them to my email: maksimkurb@gmail.com or research package source code ;)
+     *
+     * Maxim Kurbatov
+     */
 );
