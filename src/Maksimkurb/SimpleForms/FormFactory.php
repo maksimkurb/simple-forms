@@ -4,6 +4,7 @@ namespace Maksimkurb\SimpleForms;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Form;
+use Illuminate\Support\Facades\Input;
 
 class FormFactory {
 
@@ -33,6 +34,8 @@ class FormFactory {
         $formElement->name($name);
         $formElement->id($name);
 
+        $formElement->value(Input::old($name));
+
         return $formElement;
     }
 
@@ -44,7 +47,7 @@ class FormFactory {
         return FormFactory::text($name)->type('email');
     }
 
-    public static function textarea($name, $content) {
+    public static function textarea($name, $content=null) {
         $formElement = new FormElement();
 
         $formElement->closable(true);
@@ -52,7 +55,7 @@ class FormFactory {
 
         $formElement->name($name);
         $formElement->id($name);
-        $formElement->content($content);
+        $formElement->content($content!=null?$content:Input::old($name));
 
         return $formElement;
     }

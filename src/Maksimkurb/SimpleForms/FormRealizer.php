@@ -159,7 +159,9 @@ class FormRealizer {
                 $attributes[] = $attribute;
         }
 
-        $attributes[] = static::processClasses($formElement);
+        $classes = static::processClasses($formElement);
+        if (isset($classes))
+            $attributes[] = $classes;
 
         $result = '<'.implode(' ', $attributes).'>';
 
@@ -187,52 +189,47 @@ class FormRealizer {
     protected static function processSimpleAttribute($formElement, $variable, $attributeKey) {
         if (!$formElement instanceof FormElement) return null;
 
-        $attributePar = static::$simpleAttributes[$variable];
-
         $formAttribute = $formElement->_get($variable);
         if ($formAttribute==null) {
             return null;
         }
 
-        if (is_string($attributePar)) {
-            $attributeName = $attributePar;
+        if (is_string($attributeKey)) {
+            $attributeName = $attributeKey;
             $value = $formAttribute;
         } else { // Else it should be array
             $attributeName = null;
             $value = null;
             $acceptable = null;
-
-            $tags = array_keys($attributePar);
-
-            foreach ($tags as $tag) {
+            foreach ($attributeKey as $tag => $parameters) {
                 $isAny = $tag == '*';
+                if (!($tag == $formElement->_get('tag') || $isAny)) continue;
 
-                if ($tag != $formElement->_get('tag') || !$isAny) continue;
-
-                if (isset($attributePar[$tag]['key']) && (!$isAny||$attributeName==null)) {
-                    $attributeName = $attributePar[$tag]['key'];
+                if (isset($parameters['key']) && (!$isAny||$attributeName==null)) {
+                    $attributeName = $parameters['key'];
                 }
-                if (isset($attributePar[$tag]['values']) && isset($attributePar[$tag]['values'][$value]) && (!$isAny||$value==null)) {
-                    $value = $attributePar[$tag]['values'][$value];
+                if (isset($parameters['values']) && isset($parameters['values'][$value]) && (!$isAny||$value==null)) {
+                    $value = $parameters['values'][$value];
                 }
-                if (isset($attributePar[$tag]['unacceptableValues']) && isset($attributePar[$tag]['unacceptableValues'][$value]) && (!$isAny||$acceptable=null)) {
-                    $acceptable = $attributePar[$tag]['unacceptableValues'][$value];
+                if (isset($parameters['unacceptableValues']) && isset($parameters['unacceptableValues'][$value]) && (!$isAny||$acceptable=null)) {
+                    $acceptable = $parameters['unacceptableValues'][$value];
                 }
             }
 
             if ($attributeName==null)
-                $attributeName = $attributeKey;
+                $attributeName = $variable;
 
             if ($value==null)
                 $value = $formElement->_get($variable);
 
-            if (!$acceptable)
+            if ($acceptable==null)
+                $acceptable = true;
+
+            if ($acceptable==false)
                 return null;
         }
 
-        $attribute = $attributeName.'='.static::quote().$value.static::quote();
-
-        return $attribute;
+        return $attributeName.'='.static::quote().$value.static::quote();
     }
 
 }
