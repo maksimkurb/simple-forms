@@ -1,6 +1,7 @@
 {
     "name": "maksimkurb/simple-forms",
     "description": "",
+    "license": "GPL-2.0",
     "authors": [
         {
             "name": "Maxim Kurbatov",
