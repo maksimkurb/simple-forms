@@ -481,6 +481,27 @@ class FormFactory {
         return $formElement;
     }
 
+    /*
+     * Combobox
+     * <select>...</select>
+     */
+    public static function combobox($name) {
+        $formElement = new FormElement();
+
+        $formElement->closable(true);
+        $formElement->tag('select');
+
+        $formElement->name($name);
+
+        $formElement->value(Input::old($name));
+
+        return $formElement;
+    }
+
+    public static function group($caption=null, $name=null) {
+        return new OptionsGroup($caption, $name);
+    }
+
     public static function token() {
         return Form::token();
     }

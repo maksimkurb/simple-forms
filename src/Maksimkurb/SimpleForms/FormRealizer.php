@@ -173,11 +173,43 @@ class FormRealizer {
         $result = '<'.implode(' ', $attributes).'>';
 
         if ($formElement->_get('closable')) {
+
+            if ($formElement->_get('tag')=='select') {
+                $formElement->content(static::processOptionGroups($formElement));
+            }
+
             $result .= $formElement->_get('content');
             $result .='</'.$formElement->_get('tag').'>';
         }
 
         return $result;
+    }
+
+    protected static function processOptionGroups($formElement) {
+        if (!$formElement instanceof FormElement) return null;
+
+        $groups = '';
+
+        foreach ($formElement->_get('groups') as $group) {
+            if (!$group instanceof OptionsGroup) continue;
+            //$classesAttributes[] = $key.'='.static::quote().$value.static::quote();
+            $options = '';
+            foreach ($group->_get('options') as $option) {
+                if ($option[2]==null&&$formElement->_get('value')==$option[0]) {
+                    $option[2] = true;
+                }
+                $options .= '<option value='.static::quote().$option[0].static::quote().($option[2]?' selected='.static::quote().'selected'.static::quote():'').($option[3]?' disabled='.static::quote().'disabled'.static::quote():'').'>'.$option[1].'</option>';
+            }
+            if ($group->_get('caption')!=null) {
+                $options = '<optgroup label='.static::quote().$group->_get('caption').static::quote().'>'.$options.'</optgroup>';
+            }
+            $groups .= $options;
+        }
+
+        if (strlen($groups)==0)
+            return null;
+
+        return $groups;
     }
 
     protected static function processCustomAttributes($formElement) {

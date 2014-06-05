@@ -13,7 +13,7 @@ class FormElement {
     protected $id = null;               // Tag ID
     protected $type = null;             // Input type
     protected $data = array();          // data-* attributes
-    protected $options = array();       // For <select> (combobox) tag (or similar)
+    protected $groups = array();       // For <select> (combobox) tag (or similar)
 
     protected $style = null;
 
@@ -93,6 +93,8 @@ class FormElement {
     }
 
     public function id($id) {
+        if (is_null($id))
+            return $this;
         $this->id = Config::get('simple-forms::prefixes.id').$id;
         return $this;
     }
@@ -122,15 +124,15 @@ class FormElement {
         return $this;
     }
 
-    public function addOption($value, $label, $selected=null, $disabled=null) {
-        $this->options[] = array($value, $label, $selected, $disabled);
+    public function addGroup($group) {
+        $this->groups[] = $group;
         return $this;
     }
 
-    public function removeOption($value) {
-        foreach ($this->options as $id => $option) {
-            if ($option[0] == $value) {
-                unset($this->options[$id]);
+    public function removeGroup($name) {
+        foreach ($this->groups as $id => $group) {
+            if ($group->_get('name') == $name) {
+                unset($this->groups[$id]);
                 break;
             }
         }
@@ -193,6 +195,8 @@ class FormElement {
     }
 
     public function forInput($inputId) {
+        if (is_null($inputId))
+            return $this;
         $this->for = Config::get('simple-forms::prefixes.id').$inputId;
         return $this;
     }

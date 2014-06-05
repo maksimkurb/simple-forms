@@ -1,7 +1,5 @@
-simple-forms
-============
+SimpleForms
+===========
 
-Simple Laravel4 package to creating forms elements with pleasant for perception code.
+This package is made specially to facilitate creation of forms and to make a code simpler for perception.
 
-### Package creation progress
-[=================>--] 90%

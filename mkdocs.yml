@@ -1,0 +1,16 @@
+site_name: 'SimpleForms documentation'
+repo_url: 'https://github.com/maksimkurb/simple-forms'
+site_author: 'Maxim Kurbatov'
+site_favicon: '/img/favicon.ico'
+pages:
+- ['index.md', 'SimpleForm']
+
+- ['installing.md']
+- ['components.md']
+- ['attributes.md']
+- ['license.md']
+
+theme: 'flatly'
+docs_dir: 'docs'
+site_dir: 'site'
+dev_addr: '127.0.0.1:8080'
